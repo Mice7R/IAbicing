@@ -94,7 +94,7 @@ public class Furgo {
 	 *
 	 * @return El coste total en combustible que custa el viaje
 	 */
-	public Integer coste_combustible()
+	public int coste_combustible()
 	{
 		if (i > 0)
 		{
@@ -102,7 +102,8 @@ public class Furgo {
 			int nb = dest[0].i2;
 			for (int x = 1; x < i; ++x)
 			{
-				coste += (nb + 9) / 10;
+				coste += ((nb + 9) / 10) * distancia(Main.Problema.get(dest[x-1].i1),
+						Main.Problema.get(dest[x].i1));
 				nb += dest[x].i2;
 			}
 			return coste;
@@ -118,7 +119,7 @@ public class Furgo {
 	 *
 	 * @return La distancia Manhattan entre las dos estaciones.
 	 */
-	private Integer distancia(Estacion e1, Estacion e2)
+	private int distancia(Estacion e1, Estacion e2)
 	{
 		return Math.abs(e1.getCoordX() - e2.getCoordX())
 				+ Math.abs(e1.getCoordY() - e2.getCoordY());

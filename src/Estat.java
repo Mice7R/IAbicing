@@ -119,4 +119,10 @@ public class Estat {
 		return r;
 	}
 
+	public void canonizar()
+	{
+		for (int f = 0; f < Main.nfurgos; ++f)
+			furgos[f].canonizar();
+	}
+
 }

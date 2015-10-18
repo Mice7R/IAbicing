@@ -38,12 +38,20 @@ public class Main {
 			seed = Integer.parseInt(args[4]);
 		}
 
+		/*nestacions = 3;
+			nbic = 21;
+		nfurgos = 1;*/
 		Problema = new IA.Bicing.Estaciones(nestacions,
-				nbic, demanda, seed);
+		 nbic, demanda, seed);
+		// Amañar problema
+		/*amañar(0, 0, 0, 11, 0);
+			amañar(1, 0, 1, 0, 10);
+		amañar(2, 999, 999, 0, 11);*/
+
 
 		// calcular configuracion inicial de las estaciones
-		//Estat.calcula_conf_inicial();
-		Estat.calcula_conf_inicial_triky();
+		Estat.calcula_conf_inicial();
+		//Estat.calcula_conf_inicial_triky();
 
 		long startTime = System.nanoTime();
 		HillClimbingSearch();
@@ -52,25 +60,35 @@ public class Main {
 
 	}
 
+	private static void amañar(int e, int x, int y, int no, int d)
+	{
+		Problema.get(e).setCoordX(x);
+		Problema.get(e).setCoordY(y);
+		Problema.get(e).setNumBicicletasNoUsadas(no);
+		Problema.get(e).setNumBicicletasNext(no);
+		Problema.get(e).setDemanda(d);
+	}
+
 	private static void HillClimbingSearch()
 	{
 		try
 		{
-			Estat inicial = new Estat(nfurgos);
-			Heuristic1 h = new Heuristic1();
+			Estat e = new Estat(nfurgos);
+			Heuristic2 h = new Heuristic2();
 			System.out.println("Cost inicial (Heuristic): "
-					+ h.getHeuristicValue(inicial));
-			System.out.println("Const inicial (Eurus): " + inicial.eurus1());
-			Problem problem = new Problem(inicial, new GeneradorEstats(),
+					+ h.getHeuristicValue(e));
+			System.out.println("Const inicial (Eurus): " + e.eurus1());
+			Problem problem = new Problem(e, new GeneradorEstats(),
 					new Poker(), h);
 			Search search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
 
 			printActions(agent.getActions());
 			printInstrumentation(agent.getInstrumentation());
-			System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(search.getGoalState()));
-			System.out.println("Cost final (Eurus): "
-					+ ((Estat) (search.getGoalState())).eurus1());//(search.goalestate()).eurus1
+			e = (Estat) search.getGoalState();
+			e.canonizar();
+			System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(e));
+			System.out.println("Cost final (Eurus): " + e.eurus2());
 		} catch (Exception e)
 		{
 			e.printStackTrace();
