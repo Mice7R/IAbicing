@@ -20,19 +20,21 @@ public class GeneradorEstats implements SuccessorFunction {
 		for ( int i = 0; i < Main.nfurgos; ++i)
 		{
 			// la furgo esta buida
-			if ( estat.furgos[i].getbicicletes() == 0 ) continue;
-			for ( int j = 0; j < Main.nestacions; ++j )
+			if (estat.furgos[i].pot_entregar())
 			{
-				// nomes deixem bicis a les estacions que falten
-				if ( estacions[j] < 0 )
+				for (int j = 0; j < Main.nestacions; ++j)
 				{
-					Estat nouestat = estat.copia();
-					// deixem el minim entre les que tenim i les que fan falta
-					int bicis = -(Math.min(nouestat.furgos[i].getbicicletes(),
-							-estacions[j]));
-					nouestat.furgos[i].enviar(j, bicis);
-					R.add(new Successor("E E:" + j + " F:" + i +
-							" Q:" + bicis, nouestat));
+					// nomes deixem bicis a les estacions que falten
+					if (estacions[j] < 0)
+					{
+						Estat nouestat = estat.copia();
+						// deixem el minim entre les que tenim i les que fan falta
+						int bicis = -(Math.min(nouestat.furgos[i].getbicicletes(),
+								-estacions[j]));
+						nouestat.furgos[i].enviar(j, bicis);
+						R.add(new Successor("E E:" + j + " F:" + i
+								+ " Q:" + bicis, nouestat));
+					}
 				}
 			}
 		}

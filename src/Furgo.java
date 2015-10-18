@@ -40,6 +40,16 @@ public class Furgo {
 		return i == 0 && nbicicletes < Furgo.MAX;
 	}
 
+	/**
+	 * Retorna si la furgoneta pot entregar bicicletes
+	 *
+	 * @return TRUE si pot entregar
+	 */
+	public Boolean pot_entregar()
+	{
+		return nbicicletes > 0 && i < Furgo.MAX_VIAJES;
+	}
+
 	public Furgo copia(){
 		Furgo a = new Furgo();
 		for ( a.i=0; a.i < i; ++a.i) {
