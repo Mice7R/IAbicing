@@ -63,7 +63,27 @@ public class Furgo {
 	{
 		return nbicicletes;
 	}
+
+	/**
+	 * bicicletes que sobren
+	 *
+	 * @return 0 si no sobre cap bicicleta o si encara queden viatges, el numero
+	 * de bicicletes que es van agafar de mes en altre cas.
+	 */
+	public Integer bicicletessobren()
+	{
+		return i < Furgo.MAX_VIAJES ? 0 : nbicicletes;
+	}
+
+	/**
+	 * Se carga las bicicletas que sobran o no hace nada si no sobran.
+	 */
+	public void canonizar()
+	{
+		// si todo va bien i nunca sera > MAXVIAJES >.<
+		if (i == Furgo.MAX_VIAJES)
+		{
+			dest[0].i2 -= nbicicletes;
+		}
+	}
 }
-
-
-

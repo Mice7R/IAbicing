@@ -32,6 +32,7 @@ public class GeneradorEstats implements SuccessorFunction {
 						int bicis = -(Math.min(nouestat.furgos[i].getbicicletes(),
 								-estacions[j]));
 						nouestat.furgos[i].enviar(j, bicis);
+						nouestat.furgos[i].canonizar();
 						R.add(new Successor("E E:" + j + " F:" + i
 								+ " Q:" + bicis, nouestat));
 					}
