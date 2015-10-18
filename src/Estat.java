@@ -79,6 +79,25 @@ public class Estat {
 		}
 	}
 
+	/**
+	 * Una configuracion problematica. El dinero maximo = nfurgos EUR
+	 * NESTACIONES > NFURGOS !
+	 */
+	static public void calcula_conf_inicial_triky()
+	{
+		configuracio_inicial = new Integer[Main.nestacions];
+		configuracio_inicial[0] = Main.nfurgos;
+		for (int e = 1; e < Main.nfurgos; ++e)
+		{
+			configuracio_inicial[e] = -1;
+		}
+		configuracio_inicial[Main.nfurgos] = -2;
+		for (int e = Main.nfurgos + 1; e < Main.nestacions; ++e)
+		{
+			configuracio_inicial[e] = 0;
+		}
+	}
+
 	public double eurus1()
 	{
 		double r = 0;

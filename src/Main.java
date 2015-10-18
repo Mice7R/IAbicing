@@ -42,7 +42,8 @@ public class Main {
 				nbic, demanda, seed);
 
 		// calcular configuracion inicial de las estaciones
-		Estat.calcula_conf_inicial();
+		//Estat.calcula_conf_inicial();
+		Estat.calcula_conf_inicial_triky();
 
 		long startTime = System.nanoTime();
 		HillClimbingSearch();
