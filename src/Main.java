@@ -35,6 +35,9 @@ public class Main {
 		Problema = new IA.Bicing.Estaciones(nestacions,
 				nbic, demanda, seed);
 
+		// calcular configuracion inicial de las estaciones
+		Estat.calcula_conf_inicial();
+
 		long startTime = System.nanoTime();
 		HillClimbingSearch();
 		System.out.println("Temps: " + (System.nanoTime() - startTime)
