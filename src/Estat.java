@@ -98,17 +98,24 @@ public class Estat {
 		}
 	}
 
-	public double eurus1()
+	public Integer eurus1()
 	{
-		double r = 0;
-
+		Integer r = 0;
 		Integer[] estacions = estacions();
-
 		for (int e = 0; e < Main.nestacions; ++e)
 		{
 			r += Math.min(estacions[e], 0) - Math.min(configuracio_inicial[e], 0);
 		}
+		return r;
+	}
 
+	public Integer eurus2()
+	{
+		Integer r = eurus1();
+		for (int f = 0; f < Main.nfurgos; ++f)
+		{
+			r -= furgos[f].coste_combustible();
+		}
 		return r;
 	}
 

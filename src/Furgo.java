@@ -1,4 +1,6 @@
 
+import IA.Bicing.Estacion;
+
 
 public class Furgo {
 
@@ -85,5 +87,40 @@ public class Furgo {
 		{
 			dest[0].i2 -= nbicicletes;
 		}
+	}
+
+	/**
+	 * Retorna el coste del viaje.
+	 *
+	 * @return El coste total en combustible que custa el viaje
+	 */
+	public Integer coste_combustible()
+	{
+		if (i > 0)
+		{
+			Integer coste = 0;
+			int nb = dest[0].i2;
+			for (int x = 1; x < i; ++x)
+			{
+				coste += (nb + 9) / 10;
+				nb += dest[x].i2;
+			}
+			return coste;
+		} else
+			return 0;
+	}
+
+	/**
+	 * Distancia Manhattan entre dos estaciones
+	 *
+	 * @param e1 Estacion 1
+	 * @param e2 Estacion 2
+	 *
+	 * @return La distancia Manhattan entre las dos estaciones.
+	 */
+	private Integer distancia(Estacion e1, Estacion e2)
+	{
+		return Math.abs(e1.getCoordX() - e2.getCoordX())
+				+ Math.abs(e1.getCoordY() - e2.getCoordY());
 	}
 }
