@@ -94,11 +94,11 @@ public class Furgo {
 	 *
 	 * @return El coste total en combustible que custa el viaje
 	 */
-	public int coste_combustible()
+	public double coste_combustible()
 	{
 		if (i > 0)
 		{
-			Integer coste = 0;
+			double coste = 0;
 			int nb = dest[0].i2;
 			for (int x = 1; x < i; ++x)
 			{
@@ -112,16 +112,31 @@ public class Furgo {
 	}
 
 	/**
+	 *
+	 * @return Distancia total recorrida (km)
+	 */
+	public double distancia_recorrida()
+	{
+		double d = 0;
+		for (int x = 1; x < i; ++x)
+		{
+			d += distancia(Main.Problema.get(dest[x-1].i1),
+					Main.Problema.get(dest[x].i1));
+		}
+		return d;
+	}
+
+	/**
 	 * Distancia Manhattan entre dos estaciones
 	 *
 	 * @param e1 Estacion 1
 	 * @param e2 Estacion 2
 	 *
-	 * @return La distancia Manhattan entre las dos estaciones.
+	 * @return La distancia Manhattan entre las dos estaciones. (km)
 	 */
-	private int distancia(Estacion e1, Estacion e2)
+	private double distancia(Estacion e1, Estacion e2)
 	{
-		return Math.abs(e1.getCoordX() - e2.getCoordX())
-				+ Math.abs(e1.getCoordY() - e2.getCoordY());
+		return (Math.abs(e1.getCoordX() - e2.getCoordX())
+				+ Math.abs(e1.getCoordY() - e2.getCoordY())) / 1000;
 	}
 }

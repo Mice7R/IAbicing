@@ -13,9 +13,7 @@ public class Heuristic2 implements HeuristicFunction {
 			r += -(estat.furgos[i].i > 0 ? estat.furgos[i].dest[0].i2 : 0);
 			for (int j = 1; j < estat.furgos[i].i; ++j)
 			{
-				int c = estat.furgos[i].coste_combustible();
-				System.err.println(c);
-				r += 10 * (estat.furgos[i].dest[j].i2) + (estat.furgos[i].coste_combustible() / 1000);
+				r += 10 * (estat.furgos[i].dest[j].i2 + estat.furgos[i].coste_combustible());
 			}
 		}
 		return r;

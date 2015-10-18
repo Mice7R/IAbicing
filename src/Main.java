@@ -1,4 +1,5 @@
 
+import aima.search.framework.HeuristicFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
@@ -74,7 +75,7 @@ public class Main {
 		try
 		{
 			Estat e = new Estat(nfurgos);
-			Heuristic2 h = new Heuristic2();
+			HeuristicFunction h = new Heuristic2();
 			System.out.println("Cost inicial (Heuristic): "
 					+ h.getHeuristicValue(e));
 			System.out.println("Const inicial (Eurus): " + e.eurus1());
@@ -89,6 +90,7 @@ public class Main {
 			e.canonizar();
 			System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(e));
 			System.out.println("Cost final (Eurus): " + e.eurus2());
+			System.out.println("Distancia total recorrida: " + e.distancia_total() + " Km");
 		} catch (Exception e)
 		{
 			e.printStackTrace();

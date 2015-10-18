@@ -98,9 +98,9 @@ public class Estat {
 		}
 	}
 
-	public Integer eurus1()
+	public double eurus1()
 	{
-		Integer r = 0;
+		double r = 0;
 		Integer[] estacions = estacions();
 		for (int e = 0; e < Main.nestacions; ++e)
 		{
@@ -109,9 +109,9 @@ public class Estat {
 		return r;
 	}
 
-	public Integer eurus2()
+	public double eurus2()
 	{
-		Integer r = eurus1();
+		double r = eurus1();
 		for (int f = 0; f < Main.nfurgos; ++f)
 		{
 			r -= furgos[f].coste_combustible();
@@ -123,6 +123,16 @@ public class Estat {
 	{
 		for (int f = 0; f < Main.nfurgos; ++f)
 			furgos[f].canonizar();
+	}
+
+	public double distancia_total()
+	{
+		double d = 0;
+		for (int f = 0; f < Main.nfurgos; ++f)
+		{
+			d += furgos[f].distancia_recorrida();
+		}
+		return d;
 	}
 
 }
