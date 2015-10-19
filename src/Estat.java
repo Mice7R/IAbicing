@@ -98,7 +98,7 @@ public class Estat {
 		}
 	}
 
-	public double eurus1()
+	private double eurus1()
 	{
 		double r = 0;
 		Integer[] estacions = estacions();
@@ -109,7 +109,7 @@ public class Estat {
 		return r;
 	}
 
-	public double eurus2()
+	private double eurus2()
 	{
 		double r = eurus1();
 		for (int f = 0; f < Main.nfurgos; ++f)
@@ -117,6 +117,26 @@ public class Estat {
 			r -= furgos[f].coste_combustible();
 		}
 		return r;
+	}
+
+	/**
+	 * Eurus wrapper
+	 *
+	 * @param m Mode de funcio 0=sense combustible 1=amb combustible
+	 *
+	 * @return eurus
+	 */
+	public double eurus(int m)
+	{
+		switch (m)
+		{
+			case 0:
+				return eurus1();
+			case 1:
+				return eurus2();
+			default:
+				return -123456.789;
+		}
 	}
 
 	public void canonizar()
