@@ -62,8 +62,7 @@ public class Main {
 		/*nestacions = 3;
 			nbic = 21;
 		nfurgos = 1;*/
-		Problema = new IA.Bicing.Estaciones(nestacions,
-		 nbic, demanda, seed);
+		Problema = new IA.Bicing.Estaciones(nestacions, nbic, demanda, seed);
 		// Amañar problema
 		/*amañar(0, 0, 0, 11, 0);
 			amañar(1, 0, 1, 0, 10);
@@ -182,9 +181,9 @@ public class Main {
 	private static void printActions(List actions)
 	{
 		//if (mode == 1 || mode == 3) {
-		for (int i = 0; i < actions.size(); i++)
+		for (Object action1 : actions)
 		{
-			String action = (String) actions.get(i);
+			String action = (String) action1;
 			System.out.println(action);
 		}
 		//}

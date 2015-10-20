@@ -46,12 +46,12 @@ public class Estat {
 	{
 		Integer[] r = (Integer[]) configuracio_inicial.clone();
 
-		for (int f = 0; f < Main.nfurgos; ++f)
+		for (Furgo f : furgos)
 		{
 			// para cada viaje de la furgo
-			for (int i = 0; i < furgos[f].i; ++i)
+			for (int i = 0; i < f.i; ++i)
 			{
-				iPair destino = furgos[f].dest[i];
+				iPair destino = f.dest[i];
 				/* Los simbolos son distintos
 				 * En Furgos positivo es que a recogido, es decir que ha quitado
 				 * de la estacion. */
@@ -112,9 +112,9 @@ public class Estat {
 	private double eurus2()
 	{
 		double r = eurus1();
-		for (int f = 0; f < Main.nfurgos; ++f)
+		for (Furgo f : furgos)
 		{
-			r -= furgos[f].coste_combustible();
+			r -= f.coste_combustible();
 		}
 		return r;
 	}
@@ -148,9 +148,9 @@ public class Estat {
 	public double distancia_total()
 	{
 		double d = 0;
-		for (int f = 0; f < Main.nfurgos; ++f)
+		for (Furgo f : furgos)
 		{
-			d += furgos[f].distancia_recorrida();
+			d += f.distancia_recorrida();
 		}
 		return d;
 	}

@@ -17,7 +17,7 @@ public class GeneradorEstats implements SuccessorFunction {
 		Integer estacions[] = estat.estacions();
 
 		//Operado 1 (Entregar bicicletes)
-		for ( int i = 0; i < Main.nfurgos; ++i)
+		for (int i = 0; i < Main.nfurgos; ++i)
 		{
 			// la furgo esta buida
 			if (estat.furgos[i].pot_entregar())
