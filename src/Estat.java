@@ -1,5 +1,7 @@
 
 import IA.Bicing.Estacion;
+import IA.util.Quicksort;
+import java.util.Random;
 
 public class Estat {
 
@@ -10,6 +12,13 @@ public class Estat {
 	 * negativos indican que faltan bicicletas.
 	 */
 	static public Integer[] configuracio_inicial;
+
+	/**
+	 * Informacio sobre la configuracio inicial
+	 */
+	static private Integer estacions_superhabit = 0;
+	static private Integer estacions_demanda = 0;
+
 
 	Estat(Integer nfurg)
 	{
@@ -30,6 +39,46 @@ public class Estat {
 
 		return a;
 
+	}
+
+	/**
+	 * Genera solucion random. Coge un numero aleatorio de bicis de una estacion
+	 * que mas le sobra y los envia a donde mas falta
+	 */
+	private void random_ordenado()
+	{
+		Integer[] estacions = estacions();
+		Integer[] ids = new Integer[Main.nestacions];
+		for (int i = 0; i < Main.nestacions; ++i)
+		{
+			ids[i] = i;
+		}
+		Quicksort.sort(estacions, ids, 0, ids.length);
+		for (int i = 0, f = 0, j = ids.length - 1;
+				i < j && f < Main.nfurgos && estacions[i] > 0; ++f)
+		{
+			Random rand = new Random();
+			int enviar = Math.min(rand.nextInt(estacions[i]) + 1, Furgo.MAX);
+			//System.out.printf("E=%d(%d) B=%d E=%d(%d)\n", ids[i], estacions[i], enviar, ids[j], estacions[j]);
+			furgos[f].enviar(ids[i++], enviar);
+			furgos[f].enviar(ids[j--], -enviar);
+		}
+	}
+
+	/**
+	 * Wrapper para generar soluciones.
+	 * 0: Vacia 1: random_ordenado
+	 *
+	 * @param i El algoritmo de generacion
+	 */
+	public void generar_solucion(int i)
+	{
+		switch (i)
+		{
+			case 1:
+				random_ordenado();
+				break;
+		}
 	}
 
 	public Integer size()
@@ -76,6 +125,13 @@ public class Estat {
 			configuracio_inicial[e] = Math.min(
 					estacion.getNumBicicletasNoUsadas(),
 					estacion.getNumBicicletasNext() - estacion.getDemanda());
+			if (configuracio_inicial[e] > 0)
+			{
+				++estacions_superhabit;
+			} else if (configuracio_inicial[e] < 0)
+			{
+				++estacions_demanda;
+			}
 		}
 	}
 

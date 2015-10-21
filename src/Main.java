@@ -145,6 +145,7 @@ public class Main {
 		try
 		{
 			Estat e = new Estat(nfurgos);
+			e.generar_solucion(1);
 			System.out.println("Cost inicial (Heuristic): "
 					+ h.getHeuristicValue(e));
 			System.out.println("Const inicial (Eurus): " + e.eurus(heur));
