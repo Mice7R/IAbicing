@@ -3,7 +3,7 @@ import aima.search.framework.SuccessorFunction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneradorEstats implements SuccessorFunction {
+public class GeneradorEstatsHC1 implements SuccessorFunction {
 
 	@Override
 	public List getSuccessors(Object state)

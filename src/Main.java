@@ -149,7 +149,7 @@ public class Main {
 			System.out.println("Cost inicial (Heuristic): "
 					+ h.getHeuristicValue(e));
 			System.out.println("Const inicial (Eurus): " + e.eurus(heur));
-			Problem problem = new Problem(e, new GeneradorEstats(),
+			Problem problem = new Problem(e, new GeneradorEstatsHC1(),
 					new Poker(), h);
 			Search search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
