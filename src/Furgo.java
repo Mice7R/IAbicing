@@ -31,6 +31,44 @@ public class Furgo {
 	}
 
 	/**
+	 * Modifica una recogida. PRE: v < f.i; si v == 0 -> q>=0;
+		 *
+	 * @param e estacion
+	 * @param q cantidad
+	 * @param v viaje
+	 */
+	void modificar_recogida(int v, Integer q)
+	{
+		if (v == 0)
+		{
+			if (q == 0)
+			{
+				i = nbicicletes = 0;
+			} else
+			{
+				i = 1;
+				dest[0].i2 = nbicicletes = q;
+			}
+		} else
+		{
+			nbicicletes -= q - dest[v].i2;
+			if (q == 0)
+			{
+				for (int v2 = v + 1; v2 < i; ++v2)
+				{
+					dest[v2 - 1] = dest[v2];
+				}
+				--i;
+			} else
+			{
+				// FIXME Propagar cantidad
+				dest[v].i2 = q // para que el compilador se queje
+			}
+		}
+
+
+	}
+	/**
 	 * Retorna si la furgoneta puede recoger bicicletas.
 	 * Una de las restricciones es que solo se puede en la primera estacion.
 	 * @return CIERTO si puede recoger bicicletas
@@ -64,6 +102,16 @@ public class Furgo {
 	public Integer getbicicletes()
 	{
 		return nbicicletes;
+	}
+
+	public Integer getbiciclietes(int v)
+	{
+		Integer b = 0;
+		for (int i = 0; i < v && i < this.i; ++i)
+		{
+			b += dest[i].i2;
+		}
+		return b;
 	}
 
 	/**

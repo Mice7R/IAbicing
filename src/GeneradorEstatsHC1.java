@@ -3,6 +3,9 @@ import aima.search.framework.SuccessorFunction;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generador Estats Hill-Climbing mode 1
+ */
 public class GeneradorEstatsHC1 implements SuccessorFunction {
 
 	@Override
