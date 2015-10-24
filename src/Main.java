@@ -4,6 +4,7 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -75,31 +76,20 @@ public class Main {
 		//Estat.calcula_conf_inicial_triky();
 
 		heur = parse(scan, heur, "Considerar l'us de combustible? 0=NO 1=SI");
-		algo = parse(scan, algo, "Algorisme 0=HillClimbing");
+		algo = parse(scan, algo, "Algorisme 0=HillClimbing 1=SimulatedAnnealing");
 		if (algo == 0)
 		{
 			inicial = parse(scan, inicial, "Com crear la solucio inicla? 0=Buida 1=Ordenada 2=Random");
-		}
-
-		HeuristicFunction h;
-		switch (heur)
-		{
-			case 0:
-				h = (inicial == 0 ? new Heuristic1HC1() : new Heuristic1HC2());
-				break;
-			case 1:
-				h = (inicial == 0 ? new Heuristic2HC1() : new Heuristic2HC2());
-				break;
-			default:
-				System.err.println("BAD HEURISTIC");
-				return;
 		}
 
 		long startTime = System.nanoTime();
 		switch (algo)
 		{
 			case 0:
-				HillClimbingSearch(h);
+				HillClimbingSearch();
+				break;
+			case 1:
+				SimulatedAnnealing();
 				break;
 			default:
 				System.err.println("BAD ALGORITHM");
@@ -145,16 +135,73 @@ public class Main {
 		Problema.get(e).setDemanda(d);
 	}
 
-	private static void HillClimbingSearch(HeuristicFunction h)
+	private static void SayHello(Estat e, HeuristicFunction h)
 	{
+		e.generar_solucion(inicial);
+		e.mostrar_solucion();
+		System.out.println("Cost inicial (Heuristic): "
+				+ h.getHeuristicValue(e));
+		System.out.println("Const inicial (Eurus): " + e.eurus(heur));
+	}
+
+	private static void SayGoodBye(Estat e, HeuristicFunction h)
+	{
+		e.canonizar();
+		e.mostrar_solucion();
+		System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(e));
+		System.out.println("Cost final (Eurus): " + e.eurus(heur));
+		System.out.println("Distancia total recorrida: " + e.distancia_total() + " Km");
+	}
+
+	private static void SimulatedAnnealing()
+	{
+
+		int steps = 20;
+		int stiter = 200;
+		int k = 2;
+		double lamb = 1.0;
+
+		System.out.printf("steps=%d stiter=%d k=%d lamb=%f\n", steps, stiter, k, lamb);
+		try
+		{
+			HeuristicFunction h = new Heuristic1HC1();
+			Estat e = new Estat(nfurgos);
+			SayHello(e, h);
+			Problem problem = new Problem(e,
+					new GeneradorEstatsSA1(),
+					new Poker(), h);
+			Search search = new SimulatedAnnealingSearch(steps, stiter, k, lamb);
+			SearchAgent agent = new SearchAgent(problem, search);
+
+			printActions(agent.getActions());
+			printInstrumentation(agent.getInstrumentation());
+			SayGoodBye((Estat) search.getGoalState(), h);
+		} catch (Exception ex)
+		{
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	private static void HillClimbingSearch()
+	{
+
+		HeuristicFunction h;
+		switch (heur)
+		{
+			case 0:
+				h = (inicial == 0 ? new Heuristic1HC1() : new Heuristic1HC2());
+				break;
+			case 1:
+				h = (inicial == 0 ? new Heuristic2HC1() : new Heuristic2HC2());
+				break;
+			default:
+				System.err.println("BAD HEURISTIC");
+				return;
+		}
 		try
 		{
 			Estat e = new Estat(nfurgos);
-			e.generar_solucion(inicial);
-            e.mostrar_solucion();
-			System.out.println("Cost inicial (Heuristic): "
-					+ h.getHeuristicValue(e));
-			System.out.println("Const inicial (Eurus): " + e.eurus(heur));
+			SayHello(e, h);
 			Problem problem = new Problem(e,
 					(inicial == 0 ? new GeneradorEstatsHC1() : new GeneradorEstatsHC2()),
 					new Poker(), h);
@@ -163,12 +210,8 @@ public class Main {
 
 			printActions(agent.getActions());
 			printInstrumentation(agent.getInstrumentation());
-			e = (Estat) search.getGoalState();
-			e.canonizar();
-            e.mostrar_solucion();
-			System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(e));
-			System.out.println("Cost final (Eurus): " + e.eurus(heur));
-			System.out.println("Distancia total recorrida: " + e.distancia_total() + " Km");
+			SayGoodBye((Estat) search.getGoalState(), h);
+
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -189,13 +232,14 @@ public class Main {
 
 	private static void printActions(List actions)
 	{
-		//if (mode == 1 || mode == 3) {
-		for (Object action1 : actions)
+		if (algo == 0)
 		{
-			String action = (String) action1;
-			System.out.println(action);
+			for (Object action1 : actions)
+			{
+				String action = (String) action1;
+				System.out.println(action);
+			}
 		}
-		//}
 
 		System.out.println("Passos: " + actions.size());
 	}
