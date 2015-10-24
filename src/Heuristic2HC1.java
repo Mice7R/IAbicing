@@ -1,7 +1,7 @@
 
 import aima.search.framework.HeuristicFunction;
 
-public class Heuristic2 implements HeuristicFunction {
+public class Heuristic2HC1 implements HeuristicFunction {
 
 	@Override
 	public double getHeuristicValue(Object arg0)

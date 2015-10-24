@@ -23,6 +23,7 @@ public class Main {
 	public static Integer seed = 1234;
 	private static int heur = 0; // heuristic
 	private static int algo = 0; // Hill
+	private static int inicial = 0;
 
 	public static IA.Bicing.Estaciones Problema;
 
@@ -75,15 +76,19 @@ public class Main {
 
 		heur = parse(scan, heur, "Considerar l'us de combustible? 0=NO 1=SI");
 		algo = parse(scan, algo, "Algorisme 0=HillClimbing");
+		if (algo == 0)
+		{
+			inicial = parse(scan, inicial, "Com crear la solucio inicla? 0=Buida 1=Ordenada 2=Random");
+		}
 
 		HeuristicFunction h;
 		switch (heur)
 		{
 			case 0:
-				h = new Heuristic1();
+				h = (inicial == 0 ? new Heuristic1HC1() : new Heuristic1HC2());
 				break;
 			case 1:
-				h = new Heuristic2();
+				h = (inicial == 0 ? new Heuristic2HC1() : new Heuristic2HC2());
 				break;
 			default:
 				System.err.println("BAD HEURISTIC");
@@ -145,12 +150,13 @@ public class Main {
 		try
 		{
 			Estat e = new Estat(nfurgos);
-			e.generar_solucion(2);
-                        e.mostrar_solucion();
+			e.generar_solucion(inicial);
+            e.mostrar_solucion();
 			System.out.println("Cost inicial (Heuristic): "
 					+ h.getHeuristicValue(e));
 			System.out.println("Const inicial (Eurus): " + e.eurus(heur));
-			Problem problem = new Problem(e, new GeneradorEstatsHC2(),
+			Problem problem = new Problem(e,
+					(inicial == 0 ? new GeneradorEstatsHC1() : new GeneradorEstatsHC2()),
 					new Poker(), h);
 			Search search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
@@ -159,7 +165,7 @@ public class Main {
 			printInstrumentation(agent.getInstrumentation());
 			e = (Estat) search.getGoalState();
 			e.canonizar();
-                        e.mostrar_solucion();
+            e.mostrar_solucion();
 			System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(e));
 			System.out.println("Cost final (Eurus): " + e.eurus(heur));
 			System.out.println("Distancia total recorrida: " + e.distancia_total() + " Km");
