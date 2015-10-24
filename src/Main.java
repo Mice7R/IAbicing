@@ -145,11 +145,12 @@ public class Main {
 		try
 		{
 			Estat e = new Estat(nfurgos);
-			e.generar_solucion(1);
+			e.generar_solucion(2);
+                        e.mostrar_solucion();
 			System.out.println("Cost inicial (Heuristic): "
 					+ h.getHeuristicValue(e));
 			System.out.println("Const inicial (Eurus): " + e.eurus(heur));
-			Problem problem = new Problem(e, new GeneradorEstatsHC1(),
+			Problem problem = new Problem(e, new GeneradorEstatsHC2(),
 					new Poker(), h);
 			Search search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent(problem, search);
@@ -158,6 +159,7 @@ public class Main {
 			printInstrumentation(agent.getInstrumentation());
 			e = (Estat) search.getGoalState();
 			e.canonizar();
+                        e.mostrar_solucion();
 			System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(e));
 			System.out.println("Cost final (Eurus): " + e.eurus(heur));
 			System.out.println("Distancia total recorrida: " + e.distancia_total() + " Km");

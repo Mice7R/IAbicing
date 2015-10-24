@@ -37,7 +37,7 @@ public class Furgo {
 	 * @param q cantidad
 	 * @param v viaje
 	 */
-	void modificar_recogida(int v, Integer q)
+	/*void modificar_recogida(int v, Integer q)
 	{
 		if (v == 0)
 		{
@@ -46,6 +46,7 @@ public class Furgo {
 				i = nbicicletes = 0;
 			} else
 			{
+                            
 				i = 1;
 				dest[0].i2 = nbicicletes = q;
 			}
@@ -67,7 +68,24 @@ public class Furgo {
 		}
 
 
-	}
+	}*/
+        
+        public void mostrar()
+        {
+            for ( int i = 0; i < this.i; ++i )
+            {
+                System.out.printf("(E:%d %d) ", dest[i].i1, dest[i].i2);
+            }
+            System.out.println("");
+        }
+        
+        public Boolean has_anat(Integer e)
+        {
+            for ( int i = 0; i < this.i; ++i )
+                if (this.dest[i].i1 == e) return true;
+            return false;
+        }
+        
 	/**
 	 * Retorna si la furgoneta puede recoger bicicletas.
 	 * Una de las restricciones es que solo se puede en la primera estacion.
