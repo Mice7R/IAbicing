@@ -23,7 +23,7 @@ public class Furgo {
 		nbicicletes = i = 0;
 	}
 
-	void enviar(Integer estacio, Integer q)
+	public void enviar(Integer estacio, Integer q)
 	{
 		dest[i] = new iPair(estacio, q);
 		i++;
@@ -31,61 +31,42 @@ public class Furgo {
 	}
 
 	/**
-	 * Modifica una recogida. PRE: v < f.i; si v == 0 -> q>=0;
-		 *
-	 * @param e estacion
-	 * @param q cantidad
-	 * @param v viaje
+	 * Modificar un envio. 0 <= v < MAX_VIAJES>
+	 *
+	 *
+	 * @param v       Numero de viaje
+	 * @param estacio Estacion
+	 * @param q       cantidad
 	 */
-	/*void modificar_recogida(int v, Integer q)
+	public void enviar(int v, Integer estacio, Integer q)
 	{
-		if (v == 0)
+		nbicicletes -= dest[v].i2 - q;
+		dest[v].i1 = estacio;
+		dest[v].i2 = q;
+	}
+
+
+	public void mostrar()
+	{
+		for (int i = 0; i < this.i; ++i)
 		{
-			if (q == 0)
-			{
-				i = nbicicletes = 0;
-			} else
-			{
-                            
-				i = 1;
-				dest[0].i2 = nbicicletes = q;
-			}
-		} else
+			System.out.printf("(E:%d %d) ", dest[i].i1, dest[i].i2);
+		}
+		System.out.println("");
+	}
+
+	public Boolean has_anat(Integer e)
+	{
+		for (int i = 0; i < this.i; ++i)
 		{
-			nbicicletes -= q - dest[v].i2;
-			if (q == 0)
+			if (this.dest[i].i1 == e)
 			{
-				for (int v2 = v + 1; v2 < i; ++v2)
-				{
-					dest[v2 - 1] = dest[v2];
-				}
-				--i;
-			} else
-			{
-				// FIXME Propagar cantidad
-				dest[v].i2 = q // para que el compilador se queje
+				return true;
 			}
 		}
+		return false;
+	}
 
-
-	}*/
-        
-        public void mostrar()
-        {
-            for ( int i = 0; i < this.i; ++i )
-            {
-                System.out.printf("(E:%d %d) ", dest[i].i1, dest[i].i2);
-            }
-            System.out.println("");
-        }
-        
-        public Boolean has_anat(Integer e)
-        {
-            for ( int i = 0; i < this.i; ++i )
-                if (this.dest[i].i1 == e) return true;
-            return false;
-        }
-        
 	/**
 	 * Retorna si la furgoneta puede recoger bicicletas.
 	 * Una de las restricciones es que solo se puede en la primera estacion.

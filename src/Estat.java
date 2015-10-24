@@ -65,9 +65,9 @@ public class Estat {
 			furgos[f].enviar(ids[j--], -(enviar>>1));
                         furgos[f].enviar(ids[j], -furgos[f].getbicicletes());
 		}
-                
+
 	}
-        
+
         private void full_random()
         {
             Random rand = new Random();
@@ -122,7 +122,7 @@ public class Estat {
                 furgos[i].mostrar();
             }
         }
-        
+
 	public Integer size()
 	{
 		return furgos.length;
@@ -176,25 +176,6 @@ public class Estat {
 			{
 				++estacions_demanda;
 			}
-		}
-	}
-
-	/**
-	 * Una configuracion problematica. El dinero maximo = nfurgos EUR
-	 * NESTACIONES > NFURGOS !
-	 */
-	static public void calcula_conf_inicial_triky()
-	{
-		configuracio_inicial = new Integer[Main.nestacions];
-		configuracio_inicial[0] = Main.nfurgos;
-		for (int e = 1; e < Main.nfurgos; ++e)
-		{
-			configuracio_inicial[e] = -1;
-		}
-		configuracio_inicial[Main.nfurgos] = -2;
-		for (int e = Main.nfurgos + 1; e < Main.nestacions; ++e)
-		{
-			configuracio_inicial[e] = 0;
 		}
 	}
 
