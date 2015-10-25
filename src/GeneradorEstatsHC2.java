@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generador Estats Hill-Climbing mode 2. Busqueda local.
+ * Generador Estats Hill-Climbing mode 2. Busqueda local. Aquest operadors
+ * necesiten que les furgos de la solucio inicial estiguin completament
+ * asignats.
  *
  */
 public class GeneradorEstatsHC2 implements SuccessorFunction {
@@ -19,23 +21,21 @@ public class GeneradorEstatsHC2 implements SuccessorFunction {
 
 		for (int e = 0; e < Main.nestacions; ++e)
 		{
-			if (Estat.configuracio_inicial[e] > 0)
+			if (Estat.configuracio_inicial[e] > 0 && estacions[e] > 0)
 			{
 				for (int f = 0; f < Main.nfurgos; ++f)
 				{
-					if (!furgoEstacio(estat, e))
-					{
-						int bicis = Math.min(Estat.configuracio_inicial[e],
-								getDemanda(estacions, estat.furgos[f].dest[1].i1, estat.furgos[f].dest[2].i1));
-						Estat nou = estat.copia();
-						nou.furgos[f].dest[0].i1 = e;
-						nou.furgos[f].dest[0].i2 = bicis;
-						int bicis2 = Math.min(bicis,
-								-nopositiu(estacions[estat.furgos[f].dest[1].i1]));
-						nou.furgos[f].dest[1].i2 = -bicis2;
-						nou.furgos[f].dest[2].i2 = bicis2 - bicis;
-						R.add(new Successor("123:)", nou));
-					}
+					Estat nou = estat.copia();
+					Furgo fnou = nou.furgos[f];
+
+					int bicis = Math.min(Estat.configuracio_inicial[e],
+							getDemanda(estacions, fnou));
+
+					fnou.enviar(0, e, bicis);
+					int bicis2 = Math.min(bicis, -nopositiu(estacions[fnou.dest[1].i1]));
+					fnou.mod_bicis(1, -bicis2);
+					fnou.mod_bicis(2, bicis2 - bicis);
+					R.add(new Successor("123:)", nou));
 				}
 			} else if (Estat.configuracio_inicial[e] < 0)
 			{
@@ -46,16 +46,17 @@ public class GeneradorEstatsHC2 implements SuccessorFunction {
 						for (int me = 1; me < Furgo.MAX_VIAJES; ++me)
 						{
 							Estat nou = estat.copia();
-							nou.furgos[f].dest[me].i1 = e;
+							Furgo fnou = nou.furgos[f];
+							fnou.dest[me].i1 = e;
 
-							int bicis = Math.min(nonegatiu(Estat.configuracio_inicial[nou.furgos[f].dest[0].i1]),
-									getDemanda(estacions, nou.furgos[f].dest[1].i1, nou.furgos[f].dest[2].i1));
+							int bicis = Math.min(nonegatiu(Estat.configuracio_inicial[fnou.dest[0].i1]),
+									getDemanda(estacions, fnou));
 
-							nou.furgos[f].dest[0].i2 = bicis;
+							fnou.mod_bicis(0, bicis);
 							int bicis2 = Math.min(bicis,
-									-nopositiu(estacions[nou.furgos[f].dest[1].i1]));
-							nou.furgos[f].dest[1].i2 = -bicis2;
-							nou.furgos[f].dest[2].i2 = bicis2 - bicis;
+									-nopositiu(estacions[fnou.dest[1].i1]));
+							fnou.mod_bicis(1, -bicis2);
+							fnou.mod_bicis(2, bicis2 - bicis);
 							R.add(new Successor("e=" + e + "f=" + f + "me=" + me + "a="
 									+ nou.furgos[f].dest[0].i2
 									+ "b=" + nou.furgos[f].dest[1].i2
@@ -99,16 +100,25 @@ public class GeneradorEstatsHC2 implements SuccessorFunction {
 		return false;
 	}
 
-        /**
-         * Retorna la demanda de dos estacions com a valor positiu
-         * @param estacions
-         * @param e1
-         * @param e2
-         * @return
-         */
-        private int getDemanda(Integer[] estacions, int e1, int e2)
-        {
-			return -(estacions[e1] > 0 ? 0 : estacions[e1]
-					+ estacions[e2] > 0 ? 0 : estacions[e2]);
-        }
+	/**
+	 * Retorna la demanda de dos estacions com a valor positiu
+	 *
+	 * @param estacions
+	 * @param e1
+	 * @param e2
+	 *
+	 * @return
+	 */
+	@Deprecated
+	private int getDemanda(Integer[] estacions, int e1, int e2)
+	{
+		return -(estacions[e1] > 0 ? 0 : estacions[e1]
+				+ estacions[e2] > 0 ? 0 : estacions[e2]);
+	}
+
+	private int getDemanda(final Integer[] estacions, final Furgo f)
+	{
+		return -(estacions[f.dest[1].i1] > 0 ? 0 : estacions[f.dest[1].i1]
+				+ estacions[f.dest[2].i1] > 0 ? 0 : estacions[f.dest[2].i1]);
+	}
 }

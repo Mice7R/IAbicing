@@ -8,7 +8,7 @@ public class Furgo {
 	/**
 	 * Capacitat max de les furgos.
 	 */
-	public static final Integer MAX = 30;
+	public static final int MAX = 30;
 	/**
 	 * Numero maximo de viajes que puede hacer.
 	 * Notese que la recogida inicial tambien cuenta.
@@ -45,6 +45,11 @@ public class Furgo {
 		dest[v].i2 = q;
 	}
 
+	public void mod_bicis(int v, Integer q)
+	{
+		nbicicletes -= dest[v].i2 - q;
+		dest[v].i2 = q;
+	}
 
 	public void mostrar()
 	{

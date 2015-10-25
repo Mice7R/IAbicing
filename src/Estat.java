@@ -144,7 +144,7 @@ public class Estat {
 
 			if (f.i > 0)
 			{
-				r[f.dest[0].i1] = 0;
+				r[f.dest[0].i1] = Math.min(r[f.dest[0].i1] - f.dest[0].i2, 0);
 			}
 			// para cada viaje de la furgo
 			for (int i = 1; i < f.i; ++i)
