@@ -77,10 +77,7 @@ public class Main {
 
 		heur = parse(scan, heur, "Considerar l'us de combustible? 0=NO 1=SI");
 		algo = parse(scan, algo, "Algorisme 0=HillClimbing 1=SimulatedAnnealing");
-		if (algo == 0)
-		{
-			inicial = parse(scan, inicial, "Com crear la solucio inicla? 0=Buida 1=Ordenada 2=Random");
-		}
+		inicial = parse(scan, inicial, "Com crear la solucio inicla? 0=Buida 1=Ordenada 2=Random");
 
 		long startTime = System.nanoTime();
 		switch (algo)
@@ -153,10 +150,23 @@ public class Main {
 		System.out.println("Distancia total recorrida: " + e.distancia_total() + " Km");
 	}
 
+	private static HeuristicFunction getheuristic(int mode) throws Exception
+	{
+		switch (mode)
+		{
+			case 0:
+				return (inicial == 0 ? new Heuristic1HC1() : new Heuristic1HC2());
+			case 1:
+				return (inicial == 0 ? new Heuristic2HC1() : new Heuristic2HC2());
+			default:
+				System.err.println("BAD HEURISTIC");
+				throw new Exception("BAD HEUR");
+		}
+	}
 	private static void SimulatedAnnealing()
 	{
 
-		int steps = 20;
+		int steps = 5000;
 		int stiter = 200;
 		int k = 2;
 		double lamb = 1.0;
@@ -164,16 +174,15 @@ public class Main {
 		System.out.printf("steps=%d stiter=%d k=%d lamb=%f\n", steps, stiter, k, lamb);
 		try
 		{
-			HeuristicFunction h = new Heuristic1HC1();
+			HeuristicFunction h = getheuristic(heur);
 			Estat e = new Estat(nfurgos);
 			SayHello(e, h);
 			Problem problem = new Problem(e,
-					new GeneradorEstatsSA1(),
+					(inicial == 0 ? new GeneradorEstatsSA1() : new GeneradorEstatsSA2()),
 					new Poker(), h);
 			Search search = new SimulatedAnnealingSearch(steps, stiter, k, lamb);
 			SearchAgent agent = new SearchAgent(problem, search);
 
-			printActions(agent.getActions());
 			printInstrumentation(agent.getInstrumentation());
 			SayGoodBye((Estat) search.getGoalState(), h);
 		} catch (Exception ex)
@@ -184,22 +193,9 @@ public class Main {
 
 	private static void HillClimbingSearch()
 	{
-
-		HeuristicFunction h;
-		switch (heur)
-		{
-			case 0:
-				h = (inicial == 0 ? new Heuristic1HC1() : new Heuristic1HC2());
-				break;
-			case 1:
-				h = (inicial == 0 ? new Heuristic2HC1() : new Heuristic2HC2());
-				break;
-			default:
-				System.err.println("BAD HEURISTIC");
-				return;
-		}
 		try
 		{
+			HeuristicFunction h = getheuristic(heur);
 			Estat e = new Estat(nfurgos);
 			SayHello(e, h);
 			Problem problem = new Problem(e,

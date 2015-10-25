@@ -116,7 +116,7 @@ public class GeneradorEstatsHC2 implements SuccessorFunction {
 				+ estacions[e2] > 0 ? 0 : estacions[e2]);
 	}
 
-	private int getDemanda(final Integer[] estacions, final Furgo f)
+	static int getDemanda(final Integer[] estacions, final Furgo f)
 	{
 		return -(estacions[f.dest[1].i1] > 0 ? 0 : estacions[f.dest[1].i1]
 				+ estacions[f.dest[2].i1] > 0 ? 0 : estacions[f.dest[2].i1]);
