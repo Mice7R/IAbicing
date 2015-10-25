@@ -63,37 +63,38 @@ public class Estat {
 			//System.out.printf("E=%d(%d) B=%d E=%d(%d)\n", ids[i], estacions[i], enviar, ids[j], estacions[j]);
 			furgos[f].enviar(ids[i++], enviar);
 			furgos[f].enviar(ids[j--], -(enviar>>1));
-                        furgos[f].enviar(ids[j], -furgos[f].getbicicletes());
+            furgos[f].enviar(ids[j], -furgos[f].getbicicletes());
 		}
 
 	}
 
-        private void full_random()
-        {
-            Random rand = new Random();
-            Integer[] ids = new Integer[Main.nestacions];
-            Integer[] pes = new Integer[Main.nestacions];
-            for (int i = 0; i < Main.nestacions; ++i)
-            {
-                ids[i] = i;
-                pes[i] = rand.nextInt();
-            }
-            Quicksort.sort(pes, ids, 0, ids.length);
-            for (int i =0, f=0; f < Main.nfurgos && i < Main.nestacions; ++i, ++f)
-            {
-                int enviar = rand.nextInt(Furgo.MAX);
-                furgos[f].enviar(ids[i], enviar);
-                int d1;
-                int d2;
-                do {
-                    d1 = rand.nextInt(Main.nestacions);
-                    d2 = ids[d1];
-                } while ( d1 == ids[i] || d2 == ids[i] || d1 == d2);
-                int e2 = rand.nextInt(enviar)+1;
-                furgos[f].enviar(d1, -e2);
-                furgos[f].enviar(d2, e2-enviar);
-            }
-        }
+	private void full_random()
+	{
+		Random rand = new Random();
+		Integer[] ids = new Integer[Main.nestacions];
+		Integer[] pes = new Integer[Main.nestacions];
+		for (int i = 0; i < Main.nestacions; ++i)
+		{
+			ids[i] = i;
+			pes[i] = rand.nextInt();
+		}
+		Quicksort.sort(pes, ids, 0, ids.length);
+		for (int i = 0, f = 0; f < Main.nfurgos && i < Main.nestacions; ++i, ++f)
+		{
+			int enviar = rand.nextInt(Furgo.MAX);
+			furgos[f].enviar(ids[i], enviar);
+			int d1;
+			int d2;
+			do
+			{
+				d1 = rand.nextInt(Main.nestacions);
+				d2 = ids[d1];
+			} while (d1 == ids[i] || d2 == ids[i] || d1 == d2);
+			int e2 = rand.nextInt(enviar) + 1;
+			furgos[f].enviar(d1, -e2);
+			furgos[f].enviar(d2, e2 - enviar);
+		}
+	}
 
 	/**
 	 * Wrapper para generar soluciones.
@@ -108,9 +109,9 @@ public class Estat {
 			case 1:
 				random_ordenado();
 				break;
-                        case 2:
-                            full_random();
-                            break;
+			case 2:
+				full_random();
+				break;
 		}
 	}
 
@@ -129,7 +130,8 @@ public class Estat {
 	}
 
 	/**
-	 * Calcula la configuracio de les estacions
+	 * Calcula la configuracio de les estacions. Posa a 0 les estacions de les
+	 * que ja sha agafat.
 	 *
 	 * @return Configuracio de les estacions
 	 */
@@ -139,8 +141,13 @@ public class Estat {
 
 		for (Furgo f : furgos)
 		{
+
+			if (f.i > 0)
+			{
+				r[f.dest[0].i1] = 0;
+			}
 			// para cada viaje de la furgo
-			for (int i = 0; i < f.i; ++i)
+			for (int i = 1; i < f.i; ++i)
 			{
 				iPair destino = f.dest[i];
 				/* Los simbolos son distintos
@@ -167,10 +174,9 @@ public class Estat {
 			configuracio_inicial[e] = Math.min(
 					estacion.getNumBicicletasNoUsadas(),
 					estacion.getNumBicicletasNext() - estacion.getDemanda());
-                        System.err.println("e=" + e + " " + configuracio_inicial[e]);
 			if (configuracio_inicial[e] > 0)
 			{
-                            configuracio_inicial[e] = Math.min(configuracio_inicial[e], Furgo.MAX);
+				configuracio_inicial[e] = Math.min(configuracio_inicial[e], Furgo.MAX);
 				++estacions_superhabit;
 			} else if (configuracio_inicial[e] < 0)
 			{
