@@ -90,7 +90,7 @@ public class Estat {
 				d1 = rand.nextInt(Main.nestacions);
 				d2 = ids[d1];
 			} while (d1 == ids[i] || d2 == ids[i] || d1 == d2);
-			int e2 = rand.nextInt(enviar) + 1;
+			int e2 = (enviar > 0 ? rand.nextInt(enviar) + 1 : 0);
 			furgos[f].enviar(d1, -e2);
 			furgos[f].enviar(d2, e2 - enviar);
 		}
@@ -230,6 +230,14 @@ public class Estat {
 	{
 		for (int f = 0; f < Main.nfurgos; ++f)
 			furgos[f].canonizar();
+	}
+
+	public void _end()
+	{
+		for (Furgo f : furgos)
+		{
+			f.canonizar(true);
+		}
 	}
 
 	public double distancia_total()

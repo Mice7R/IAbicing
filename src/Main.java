@@ -26,13 +26,26 @@ public class Main {
 	private static int algo = 0; // Hill
 	private static int inicial = 0;
 
+	// Simulated Annealing
+	private static int steps = 5000;
+	private static int stiter = 200;
+	private static int k = 2;
+	private static double lamb = 0.0001;
+
 	public static IA.Bicing.Estaciones Problema;
 
 	public static void main(String[] args)
 	{
 
+		BufferedReader scan = new BufferedReader(new InputStreamReader(System.in));
 		switch (args.length)
 		{
+			case 7:
+			case 6:
+				steps = parse(scan, steps, "SA:steps?");
+				stiter = parse(scan, stiter, "SA:stiter?");
+				k = parse(scan, k, "SA:k?");
+				lamb = parse(scan, lamb, "SA:lamb?");
 			case 5:
 				seed = Integer.parseInt(args[4]);
 			case 4:
@@ -45,7 +58,6 @@ public class Main {
 				nestacions = Integer.parseInt(args[0]);
 		}
 
-		BufferedReader scan = new BufferedReader(new InputStreamReader(System.in));
 		switch (args.length)
 		{
 			case 0:
@@ -61,23 +73,23 @@ public class Main {
 				System.out.printf("Seed=%d\n", seed);
 		}
 
-		/*nestacions = 3;
-			nbic = 21;
-		nfurgos = 1;*/
 		Problema = new IA.Bicing.Estaciones(nestacions, nbic, demanda, seed);
-		// Amañar problema
-		/*amañar(0, 0, 0, 11, 0);
-			amañar(1, 0, 1, 0, 10);
-		amañar(2, 999, 999, 0, 11);*/
 
 
 		// calcular configuracion inicial de las estaciones
 		Estat.calcula_conf_inicial();
-		//Estat.calcula_conf_inicial_triky();
 
-		heur = parse(scan, heur, "Considerar l'us de combustible? 0=NO 1=SI");
-		algo = parse(scan, algo, "Algorisme 0=HillClimbing 1=SimulatedAnnealing");
-		inicial = parse(scan, inicial, "Com crear la solucio inicla? 0=Buida 1=Ordenada 2=Random");
+		if (args.length == 7)
+		{
+			heur = 1;
+			algo = 1;
+			inicial = 2;
+		} else
+		{
+			heur = parse(scan, heur, "Considerar l'us de combustible? 0=NO 1=SI");
+			algo = parse(scan, algo, "Algorisme 0=HillClimbing 1=SimulatedAnnealing");
+			inicial = parse(scan, inicial, "Com crear la solucio inicla? 0=Buida 1=Ordenada 2=Random");
+		}
 
 		long startTime = System.nanoTime();
 		switch (algo)
@@ -123,6 +135,24 @@ public class Main {
 		return o;
 	}
 
+	private static double parse(BufferedReader scan, double o, String s)
+	{
+		System.out.printf("%s [%f] ", s, o);
+		String r;
+		try
+		{
+			r = scan.readLine();
+			if (!"".equals(r.trim()))
+			{
+				return Double.parseDouble(r);
+			}
+		} catch (IOException | NumberFormatException ex)
+		{
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return o;
+	}
+
 	private static void amañar(int e, int x, int y, int no, int d)
 	{
 		Problema.get(e).setCoordX(x);
@@ -143,7 +173,7 @@ public class Main {
 
 	private static void SayGoodBye(Estat e, HeuristicFunction h)
 	{
-		e.canonizar();
+		e._end();
 		e.mostrar_solucion();
 		System.out.println("Cost final (Heuristic): " + h.getHeuristicValue(e));
 		System.out.println("Cost final (Eurus): " + e.eurus(heur));
@@ -165,12 +195,6 @@ public class Main {
 	}
 	private static void SimulatedAnnealing()
 	{
-
-		int steps = 5000;
-		int stiter = 200;
-		int k = 2;
-		double lamb = 1.0;
-
 		System.out.printf("steps=%d stiter=%d k=%d lamb=%f\n", steps, stiter, k, lamb);
 		try
 		{

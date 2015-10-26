@@ -55,7 +55,10 @@ public class Furgo {
 	{
 		for (int i = 0; i < this.i; ++i)
 		{
-			System.out.printf("(E:%d %d) ", dest[i].i1, dest[i].i2);
+			if (dest[i].i2 != 0)
+			{
+				System.out.printf("(E:%d %d) ", dest[i].i1, dest[i].i2);
+			}
 		}
 		System.out.println("");
 	}
@@ -138,7 +141,14 @@ public class Furgo {
 		if (i == Furgo.MAX_VIAJES)
 		{
 			dest[0].i2 -= nbicicletes;
+			nbicicletes = 0;
 		}
+	}
+
+	public void canonizar(boolean x)
+	{
+		dest[0].i2 -= nbicicletes;
+		nbicicletes = 0;
 	}
 
 	/**
@@ -154,7 +164,7 @@ public class Furgo {
 			int nb = dest[0].i2;
 			for (int x = 1; x < i; ++x)
 			{
-				coste += ((nb + 9) / 10) * distancia(Main.Problema.get(dest[x-1].i1),
+				coste += ((int) (nb + 9) / 10) * distancia(Main.Problema.get(dest[x - 1].i1),
 						Main.Problema.get(dest[x].i1));
 				nb += dest[x].i2;
 			}
@@ -172,8 +182,11 @@ public class Furgo {
 		double d = 0;
 		for (int x = 1; x < i; ++x)
 		{
-			d += distancia(Main.Problema.get(dest[x-1].i1),
-					Main.Problema.get(dest[x].i1));
+			if (dest[x - 1].i2 != 0 && dest[x].i2 != 0)
+			{
+				d += distancia(Main.Problema.get(dest[x - 1].i1),
+						Main.Problema.get(dest[x].i1));
+			}
 		}
 		return d;
 	}
